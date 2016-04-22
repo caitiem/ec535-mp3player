@@ -35,11 +35,10 @@ static int but1 = 101;
 static int but2 = 28;
 static int but3 = 113;
 
-//temp.  song name.  for song append .mp3 and for beats append .txt
-//static char SONG[11] = "learntofly";
-static int counter;
+static unsigned int counter;
 static long BEATS[1024];
 static int iterator = 0;
+static int numBeats;
 
 static struct timer_list beatTime;
 static void beatTime_handler(unsigned long data);
@@ -70,12 +69,17 @@ static int mp3play_init(void)
     pxa_gpio_mode(led1 | GPIO_OUT);
     pxa_gpio_mode(led2 | GPIO_OUT);
     pxa_gpio_mode(led3 | GPIO_OUT);
-    
    
+    pxa_gpio_set_value(led0, 0);
+    pxa_gpio_set_value(led1, 0);
+	pxa_gpio_set_value(led2, 0);
+	pxa_gpio_set_value(led3, 0);
+
     //initialize gpio pins 17 & 101 as input pins
     pxa_gpio_mode(but0);
     pxa_gpio_mode(but1);
     pxa_gpio_mode(but2);
+	pxa_gpio_mode(but3);
     
     //setup timer
     setup_timer(&beatTime, beatTime_handler, 0);
@@ -113,11 +117,13 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	// Get input from user space
 	if (copy_from_user(buffer + *f_pos, buf, len))
 		return -EFAULT;
-		
+	
+	printk(KERN_ALERT "KERNEL SPACER: buffer = %s\n", buffer);
 	if (buffer[0] == 'R')
 	{
 	    //reached end of data to be written to array
 	    //can initialize first timer now
+		numBeats = iterator;
 	    iterator = 0;
 	    printk(KERN_ALERT "IN WRITE, found R\n");
 	    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
@@ -142,21 +148,26 @@ static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *
 static void beatTime_handler(unsigned long data)
 {
     //do a thing with setting new expiration time and which lights should go on
-    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
-//    counter = rand() % 16;
-    get_random_bytes(&counter, sizeof(int));
-    counter = counter % 16;
+    get_random_bytes(&counter, sizeof(unsigned int));
+    counter = counter % 15;
+	counter++;
     printk(KERN_ALERT "IN TIMER HANDLER\n");
     printk(KERN_ALERT "counter = %d\n", counter);
     gpio_set_value(led0, counter & 1);
 	gpio_set_value(led1, (counter & 2)>>1);
 	gpio_set_value(led2, (counter & 4)>>2);
 	gpio_set_value(led3, (counter & 8)>>3);
-	msleep(250);
-	pxa_gpio_set_value(28, 0);
-	pxa_gpio_set_value(29, 0);
-	pxa_gpio_set_value(30, 0);
-	pxa_gpio_set_value(31, 0);
-    iterator++;
-    
+	if (iterator < numBeats)
+	{
+    	mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
+    	iterator++;
+ 	}
+	else
+	{
+		//song over
+		pxa_gpio_set_value(led0, 0);
+    	pxa_gpio_set_value(led1, 0);
+		pxa_gpio_set_value(led2, 0);
+		pxa_gpio_set_value(led3, 0);
+	}   
 }
