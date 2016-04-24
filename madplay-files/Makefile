@@ -1,0 +1,2 @@
+all:
+	/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc -I /ad/eng/courses/ec/ec535/gumstix/oe/cross/arm-angstrom-linux-gnueabi/include -L /ad/eng/courses/ec/ec535/gumstix/oe/cross/arm-angstrom-linux-gnueabi/lib audio_alsa.c audio.c audio_cdda.c audio_aiff.c audio_wave.c audio_snd.c audio_hex.c audio_null.c audio_raw.c version.c player.c resample.c filter.c tag.c rgain.c strcasecmp.c strncasecmp.c crc.c madplay.c -o madplay -lmad -lid3tag -lasound

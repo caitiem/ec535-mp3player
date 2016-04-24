@@ -94,7 +94,7 @@ int play(struct audio_play *play)
 {
   unsigned char data[MAX_NSAMPLES * 2 * 2];
 
-  //assert(play->samples[1]);
+  assert(play->samples[1]);
 
   audio_pcm_s16be(data, play->nsamples, play->samples[0], play->samples[1],
 		  play->mode, play->stats);
@@ -119,7 +119,7 @@ int finish(struct audio_finish *finish)
     unsigned char padding[CD_FRAMESZ * 2 * 2];
     unsigned int padsz;
 
-    //assert(samplecount < CD_FRAMESZ);
+    assert(samplecount < CD_FRAMESZ);
     padsz = CD_FRAMESZ - samplecount;
 
     memset(padding, 0, padsz * 2 * 2);
