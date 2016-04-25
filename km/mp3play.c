@@ -41,6 +41,9 @@ static int state1 = 0;
 static int state2 = 0;
 static int state3 = 0;
 
+//state variable
+static int nowPlaying = 0;
+
 static unsigned int counter;
 static long BEATS[1024];
 static int iterator = 0;
@@ -127,19 +130,24 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	printk(KERN_ALERT "KERNEL SPACER: buffer = %s\n", buffer);
 	if (buffer[0] == 'R')
 	{
-	    //reached end of data to be written to array
-	    //can initialize first timer now
-		setup_timer(&beatTime, beatTime_handler, 0);
-		numBeats = iterator;
-	    iterator = 0;
-	    printk(KERN_ALERT "IN WRITE, found R\n");
-	    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
-	    iterator++;
+		if (nowPlaying == 0)
+		{
+		    //reached end of data to be written to array
+		    //can initialize first timer now
+		    nowPlaying = 1;
+			setup_timer(&beatTime, beatTime_handler, 0);
+			numBeats = iterator;
+		    iterator = 0;
+		    printk(KERN_ALERT "IN WRITE, found R\n");
+		    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
+		    iterator++;
+		}
 	}
 	else if(buffer[0] == 'S')
 	{
 		del_timer(&beatTime);
 		
+		nowPlaying = 0;
 		iterator=0;
 		memset(BEATS,0,sizeof(long)*1024);
 		
@@ -184,5 +192,7 @@ static void beatTime_handler(unsigned long data)
     	pxa_gpio_set_value(led1, 0);
 		pxa_gpio_set_value(led2, 0);
 		pxa_gpio_set_value(led3, 0);
+
+		nowPlaying = 0;
 	}   
 }
