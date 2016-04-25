@@ -5,6 +5,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <poll.h>
+#include <time.h>
+#include <dirent.h>
 
 static long BEATS[1024];
 struct pollfd poll_fd;
@@ -15,11 +17,14 @@ void setupHandler();
 int sigFile;
 int handled_sigio = 0;
 char button_mode[10];
+char songlist[100][256];
 
 int main(int argc, char **argv) {
+	srand(time(NULL));
 	char line[256];
+	char song[256];
 	int ii, j, count = 0;
-	int i;
+	int i,shuffle=0;
     char tempstr[15];
     float tempfloat;
     float prevNum;
@@ -31,7 +36,6 @@ int main(int argc, char **argv) {
 		fputs("mp3play module isn't loaded\n",stderr);
 		return -1;
 	}
-	
 	sigFile = open("/dev/mp3play", O_RDWR, 7777);
 	if (sigFile==-1) {
 		fputs("mp3play module isn't loaded\n",stderr);
@@ -40,6 +44,46 @@ int main(int argc, char **argv) {
 	
     setupHandler();
 
+	DIR *dir;
+	struct dirent *ent;
+
+	char temp[256];
+	int count=0;
+	if ((dir = opendir ("/mnt/card/audio")) != NULL) {
+	  /* print all the files and directories within directory */
+	  while ((ent = readdir (dir)) != NULL) {
+	    //printf ( ent->d_name);
+	    strcpy(temp,ent->dname);
+	  
+	    for(i=0;i<strlen(temp);i++)
+	    {
+	    	if(temp[i]=='.')
+	    	{
+	    		temp[i]='\0';
+	    		break;
+	    	}
+	    }
+	    strcpy(songlist[count],temp);
+	    count++;
+	  }
+	  closedir (dir);
+	} else {
+	  /* could not open directory */
+	  perror ("");
+	  return EXIT_FAILURE;
+	}
+	
+    if(shuffle)
+    {
+
+	int songNum = rand()%count; 
+
+    }
+    else
+    {
+    	
+    	
+    }
     fp = fopen("/mnt/card/beats/learntofly.txt", "r");
     if (fp == NULL)
     {

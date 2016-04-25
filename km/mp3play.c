@@ -38,6 +38,15 @@ static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_
 static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 
+static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
+static unsigned int irqNumber1;
+static unsigned int irqNumber2;
+static unsigned int irqNumber3;
+static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+
 // output LED pins
 static int led0 = 16;
 static int led1 = 29; 
