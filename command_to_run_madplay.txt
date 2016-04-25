@@ -1,1 +1,1 @@
-./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative
+./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --repeat=1 --output=wave:- | aplay -D creative

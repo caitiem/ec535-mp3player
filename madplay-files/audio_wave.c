@@ -41,6 +41,8 @@ static unsigned int config_channels;
 static unsigned int config_speed;
 static unsigned int config_precision;
 
+static int have_written = 0;
+
 # define WAVE_FORMAT_PCM	0x0001
 # define UNKNOWN_LENGTH		"\xff\xff\xff\xff"
 
@@ -200,6 +202,20 @@ int play(struct audio_play *play)
     audio_error = ":fwrite";
     return -1;
   }
+  
+  if (have_written == 0) {
+		FILE * kernelFile;
+  
+  		kernelFile = fopen("/dev/mp3play", "r+");
+		if (kernelFile==NULL) {
+			fputs("mp3play module isn't loaded\n",stderr);
+			return -1;
+		}
+	
+		fputs("R", kernelFile);
+		fclose(kernelFile);
+		have_written = 1;
+	}
 
   data_len += len;
   riff_len += len;
