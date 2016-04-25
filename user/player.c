@@ -48,12 +48,12 @@ int main(int argc, char **argv) {
 	struct dirent *ent;
 
 	char temp[256];
-	int count=0;
+	count=0;
 	if ((dir = opendir ("/mnt/card/audio")) != NULL) {
 	  /* print all the files and directories within directory */
 	  while ((ent = readdir (dir)) != NULL) {
 	    //printf ( ent->d_name);
-	    strcpy(temp,ent->dname);
+	    //strcpy(temp,ent->dname);
 	  
 	    for(i=0;i<strlen(temp);i++)
 	    {
