@@ -4,9 +4,12 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <poll.h>
 
 static long BEATS[1024];
-
+struct pollfd poll_fd;
+void sighandler(int);
+void setupHandler();
 
 int main(int argc, char **argv) {
 	char line[256];
@@ -23,7 +26,12 @@ int main(int argc, char **argv) {
 		fputs("mp3play module isn't loaded\n",stderr);
 		return -1;
 	}
+
+    poll_fd.fd = pFile;
+    poll_fd.events = POLLIN; // check for normal or out-of-band
     
+    setupHandler();
+
     fp = fopen("/mnt/card/beats/learntofly.txt", "r");
     if (fp == NULL)
     {
@@ -78,4 +86,26 @@ int main(int argc, char **argv) {
     }*/
 
 	return 0;
+}
+
+void setupHandler() {
+    // Setup signal handler
+    memset(&action, 0, sizeof(action));
+    action.sa_handler = sighandler;
+    action.sa_flags = SA_SIGINFO;
+    sigemptyset(&action.sa_mask);
+    sigaction(SIGIO, &action, NULL);
+    fcntl(pFile, F_SETOWN, getpid());
+    oflags = fcntl(pFile, F_GETFL);
+    fcntl(pFile, F_SETFL, oflags | FASYNC);
+}
+
+// SIGIO handler
+void sighandler(int signo)
+{
+    int ret = poll(&poll_fd, 1, 500);
+    if (ret > 0 && (poll_fd.revents & POLLIN)) {
+        printf("%s\n", td.msg);
+    }
+    close(pFile);
 }
