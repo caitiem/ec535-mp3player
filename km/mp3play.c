@@ -82,7 +82,7 @@ static int mp3play_init(void)
 	pxa_gpio_mode(but3);
     
     //setup timer
-    setup_timer(&beatTime, beatTime_handler, 0);
+    #setup_timer(&beatTime, beatTime_handler, 0);
     
     
         
@@ -123,11 +123,20 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	{
 	    //reached end of data to be written to array
 	    //can initialize first timer now
+		setup_timer(&beatTime, beatTime_handler, 0);
 		numBeats = iterator;
 	    iterator = 0;
 	    printk(KERN_ALERT "IN WRITE, found R\n");
 	    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
 	    iterator++;
+	}
+	else if(buffer[0] == 'S')
+	{
+		del_timer(&beatTime);
+		
+		iterator=0;
+		memset(BEATS,0,1024);
+		
 	}
 	else
 	{
