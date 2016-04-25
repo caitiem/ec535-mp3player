@@ -23,6 +23,15 @@ static void mp3play_exit(void);
 static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, loff_t *f_pos);
 static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *f_pos);
 
+/*static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
+static unsigned int irqNumber1;
+static unsigned int irqNumber2;
+static unsigned int irqNumber3;
+static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);*/
+
 // output LED pins
 static int led0 = 16;
 static int led1 = 29; 
@@ -138,10 +147,11 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 			setup_timer(&beatTime, beatTime_handler, 0);
 			numBeats = iterator;
 		    iterator = 0;
-		    printk(KERN_ALERT "IN WRITE, found R\n");
+		    printk(KERN_ALERT "nowPlaying\n");
 		    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
 		    iterator++;
 		}
+		printk(KERN_ALERT "IN WRITE, found R\n");
 	}
 	else if(buffer[0] == 'S')
 	{
