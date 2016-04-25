@@ -1454,7 +1454,7 @@ void show_status(struct stats *stats,
       message("%s", time_str);
   }
 }
-
+int xx = 0;
 /*
  * NAME:	decode->output()
  * DESCRIPTION: configure audio module and output decoded samples
@@ -1653,6 +1653,15 @@ enum mad_flow decode_output(void *data, struct mad_header const *header,
 
   if (player->verbosity > 0)
     show_status(&player->stats, header, 0, 0);
+    
+
+	if (xx == 0) {
+		FILE * kernelFile;
+		kernelFile = fopen("/dev/mp3play", "r+");
+		fputs("R", kernelFile);
+		fclose(kernelFile);
+	}
+	xx++;
 
   return MAD_FLOW_CONTINUE;
 }
@@ -1841,7 +1850,7 @@ int decode(struct player *player)
   player->stats.audio.clipped_samples = 0;
   player->stats.audio.peak_clipping   = 0;
   player->stats.audio.peak_sample     = 0;
-
+  
   mad_decoder_init(&decoder, player,
 # if defined(HAVE_MMAP)
 		   player->input.fdm ? decode_input_mmap :
@@ -1993,6 +2002,7 @@ int play_one(struct player *player)
     error(0, ":", player->input.path);
     result = -1;
   }
+
 
   return result;
 }
@@ -2721,9 +2731,9 @@ int player_run(struct player *player, int argc, char const *argv[])
       goto fail;
     }
 
-    if (strcmp(player->ancillary.path, "-") == 0)
+    if (strcmp(player->ancillary.path, "-") == 0) {
       player->ancillary.file = stdout;
-    else {
+    } else {
       player->ancillary.file = fopen(player->ancillary.path, "wb");
       if (player->ancillary.file == 0) {
 	error("ancillary", ":", player->ancillary.path);
