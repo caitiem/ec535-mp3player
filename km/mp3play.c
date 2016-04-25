@@ -14,6 +14,8 @@
 #include <linux/jiffies.h> /* jiffies */
 #include <linux/delay.h>
 #include <linux/random.h>
+#include <linux/poll.h>
+#include <linux/wait.h>
 
 MODULE_LICENSE("Dual BSD/GPL");
 
@@ -22,6 +24,19 @@ static void mp3play_exit(void);
 
 static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, loff_t *f_pos);
 static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *f_pos);
+static int mp3play_open(struct inode *inode, struct file *filp);
+static int mp3play_release(struct inode *inode, struct file *filp);
+static int mp3play_fasync(int fd, struct file *filp, int mode);
+static unsigned int mp3play_poll(struct file *filp, poll_table *wait);
+
+static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
+static unsigned int irqNumber1;
+static unsigned int irqNumber2;
+static unsigned int irqNumber3;
+static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 
 // output LED pins
 static int led0 = 16;
@@ -30,7 +45,7 @@ static int led2 = 30;
 static int led3 = 31;
 
 // Input button pins
-static int playpause0 = 17;
+static int playpause0 = 117;
 static int shuffle1 = 101;
 static int volumeup2 = 28;
 static int volumedown3 = 113;
@@ -52,9 +67,17 @@ static int numBeats;
 static struct timer_list beatTime;
 static void beatTime_handler(unsigned long data);
 
+// async stuff
+static DECLARE_WAIT_QUEUE_HEAD(mp3play_wait);
+struct fasync_struct *async_queue; /* asynchronous readers */
+
 struct file_operations mp3play_fops = {
 	write: mp3play_write, 
-	read:  mp3play_read
+	read:  mp3play_read,
+	open: mp3play_open,
+	release: mp3play_release,
+	fasync: mp3play_fasync,
+	poll: mp3play_poll
 };
 
 /* Declaration of the init and exit functions */
@@ -92,9 +115,16 @@ static int mp3play_init(void)
     
     //setup timer
     //setup_timer(&beatTime, beatTime_handler, 0);
-    
-    
+    irqNumber0 = gpio_to_irq(playpause0);
+	irqNumber1 = gpio_to_irq(shuffle1);
+	irqNumber2 = gpio_to_irq(volumeup2);
+    irqNumber3 = gpio_to_irq(volumedown3);
         
+    result = request_irq(irqNumber0, (irq_handler_t) but0_irq_handler, IRQF_TRIGGER_RISING, "but0_handler", NULL);
+    result = request_irq(irqNumber1, (irq_handler_t) but1_irq_handler, IRQF_TRIGGER_RISING, "but1_handler", NULL);
+    result = request_irq(irqNumber2, (irq_handler_t) but2_irq_handler, IRQF_TRIGGER_RISING, "but2_handler", NULL);
+    result = request_irq(irqNumber3, (irq_handler_t) but3_irq_handler, IRQF_TRIGGER_RISING, "but3_handler", NULL);
+
     printk(KERN_ALERT "Module initialized\n");
     
     return 0;
@@ -112,6 +142,45 @@ static void mp3play_exit(void)
     unregister_chrdev(61, "mp3play");
     
     printk(KERN_ALERT "Module exited\n");	
+}
+
+static int mp3play_open(struct inode *inode, struct file *filp)
+{
+	/* Success */
+	return 0;
+}
+
+static int mp3play_release(struct inode *inode, struct file *filp)
+{	
+	mp3play_fasync(-1, filp, 0);
+	/* Success */
+	return 0;
+}
+
+static int mp3play_fasync(int fd, struct file *filp, int mode) {
+	printk(KERN_ALERT "in fasync\n");
+	return fasync_helper(fd, filp, mode, &async_queue);
+}
+
+static unsigned int mp3play_poll(struct file *filp, poll_table *wait)
+{
+    unsigned int mask = 0;
+    poll_wait(filp, &mp3play_wait, wait);
+    
+    if (state0) {
+    	state0 = 0;
+    	mask |= POLLIN | POLLRDNORM;
+    } else if (state1) {
+    	state1 = 0;
+    	mask |= POLLIN | POLLRDNORM;
+    } else if (state2) {
+    	state2 = 0;
+    	mask |= POLLIN | POLLRDNORM;
+    } else if (state3) {
+    	state3 = 0;
+    	mask |= POLLIN | POLLRDNORM;
+    }
+    return mask;
 }
 
 static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, loff_t *f_pos)
@@ -138,10 +207,11 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 			setup_timer(&beatTime, beatTime_handler, 0);
 			numBeats = iterator;
 		    iterator = 0;
-		    printk(KERN_ALERT "IN WRITE, found R\n");
+		    printk(KERN_ALERT "nowPlaying\n");
 		    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
 		    iterator++;
 		}
+		printk(KERN_ALERT "IN WRITE, found R\n");
 	}
 	else if(buffer[0] == 'S')
 	{
@@ -165,7 +235,29 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 }
 static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *f_pos)
 {
-    return 0;
+    char tbuf[256], *tbptr = tbuf;
+    
+    if (state0) {
+    	state0 = 0;
+    	tbptr += sprintf(tbptr, "0");
+    } else if (state1) {
+    	state1 = 0;
+    	tbptr += sprintf(tbptr, "1");
+    } else if (state2) {
+    	state2 = 0;
+    	tbptr += sprintf(tbptr, "2");
+    } else if (state3) {
+    	state3 = 0;
+    	tbptr += sprintf(tbptr, "3");
+    }    
+
+    if (copy_to_user(buf, tbuf, strlen(tbuf)))
+	{
+		printk("error\n");
+		return -EFAULT;
+	}
+    *f_pos = strlen(tbuf);
+	return strlen(tbuf);
 }
 
 static void beatTime_handler(unsigned long data)
@@ -195,4 +287,33 @@ static void beatTime_handler(unsigned long data)
 
 		nowPlaying = 0;
 	}   
+}
+
+static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+	state0 = 1;
+	if (async_queue)
+		kill_fasync(&async_queue, SIGIO, POLL_IN);
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+	state1 = 1;
+	if (async_queue)
+		kill_fasync(&async_queue, SIGIO, POLL_IN);
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+	state2 = 1;
+	if (async_queue)
+		kill_fasync(&async_queue, SIGIO, POLL_IN);
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+	state3 = 1;
+	if (async_queue)
+		kill_fasync(&async_queue, SIGIO, POLL_IN);
+	return (irq_handler_t) IRQ_HANDLED; 
 }

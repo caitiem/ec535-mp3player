@@ -4,9 +4,17 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <poll.h>
 
 static long BEATS[1024];
-
+struct pollfd poll_fd;
+struct sigaction action;
+int oflags;
+void sighandler(int);
+void setupHandler();
+int sigFile;
+int handled_sigio = 0;
+char button_mode[10];
 
 int main(int argc, char **argv) {
 	char line[256];
@@ -23,7 +31,15 @@ int main(int argc, char **argv) {
 		fputs("mp3play module isn't loaded\n",stderr);
 		return -1;
 	}
-    
+	
+	sigFile = open("/dev/mp3play", O_RDWR, 7777);
+	if (sigFile==-1) {
+		fputs("mp3play module isn't loaded\n",stderr);
+		return -1;
+	}
+	
+    setupHandler();
+
     fp = fopen("/mnt/card/beats/learntofly.txt", "r");
     if (fp == NULL)
     {
@@ -52,7 +68,7 @@ int main(int argc, char **argv) {
     printf("USER LEVEL: read all beats\n");
     //ALL beats are in the BEATS file.  now need to write it to /dev/mp3play
 	fclose(pFile);
-    for (j=0; j<i; j++)
+    /*for (j=0; j<i; j++)
     {
 		pFile = fopen("/dev/mp3play", "r+");
         sprintf(tempstr, "%d", BEATS[j]);
@@ -60,13 +76,21 @@ int main(int argc, char **argv) {
         printf("USER LEVEL: wrote BEATS[%d] = %li\n", j, BEATS[j]);
 		fclose(pFile);
     }
-	pFile = fopen("/dev/mp3play", "r+");
+	pFile = fopen("/dev/mp3play", "r+");*/
     printf("USER LEVEL: all beats written to kernel\n");
+    while(1) {
+    	if (handled_sigio) {
+    		printf("pausing\n");
+    		handled_sigio = 0;
+    		pause();
+    	}
+    }
+    //close(sigFile);
 	//sending the "R" will be once Caitie says to play the song
 	
-	fclose(pFile);
+	//fclose(pFile);
 	
-	system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
+	//system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
  
 	/*pid_t pid=fork();
     if (pid==0) { // child
@@ -78,4 +102,27 @@ int main(int argc, char **argv) {
     }*/
 
 	return 0;
+}
+
+void setupHandler() {
+	poll_fd.fd = sigFile;
+    poll_fd.events = POLLIN; // check for normal or out-of-band
+    // Setup signal handler
+    memset(&action, 0, sizeof(action));
+    action.sa_handler = sighandler;
+    action.sa_flags = SA_SIGINFO;
+    sigemptyset(&action.sa_mask);
+    sigaction(SIGIO, &action, NULL);
+    fcntl(sigFile, F_SETOWN, getpid());
+    oflags = fcntl(sigFile, F_GETFL);
+    fcntl(sigFile, F_SETFL, oflags | FASYNC);
+}
+
+// SIGIO handler
+void sighandler(int signo)
+{
+	printf("got an async\n");
+    read(sigFile,  button_mode, 10);
+    printf("%s\n", button_mode);
+    handled_sigio = 1;
 }
