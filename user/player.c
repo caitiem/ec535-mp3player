@@ -5,16 +5,20 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <poll.h>
+#include <time.h>
+#include <dirent.h>
 
 static long BEATS[1024];
 struct pollfd poll_fd;
 void sighandler(int);
 void setupHandler();
-
+char songlist[100][256];
 int main(int argc, char **argv) {
+	srand(time(NULL));
 	char line[256];
+	char song[256];
 	int ii, j, count = 0;
-	int i;
+	int i,shuffle=0;
     char tempstr[15];
     float tempfloat;
     float prevNum;
@@ -26,12 +30,49 @@ int main(int argc, char **argv) {
 		fputs("mp3play module isn't loaded\n",stderr);
 		return -1;
 	}
+	DIR *dir;
+	struct dirent *ent;
 
+	char temp[256];
+	int count=0;
+	if ((dir = opendir ("/mnt/card/audio")) != NULL) {
+	  /* print all the files and directories within directory */
+	  while ((ent = readdir (dir)) != NULL) {
+	    //printf ( ent->d_name);
+	    strcpy(temp,ent->dname);
+	  
+	    for(i=0;i<strlen(temp);i++)
+	    {
+	    	if(temp[i]=='.')
+	    	{
+	    		temp[i]="\0";
+	    		break;
+	    	}
+	    }
+	    strcpy(songlist[count],temp);
+	    count++;
+	  }
+	  closedir (dir);
+	} else {
+	  /* could not open directory */
+	  perror ("");
+	  return EXIT_FAILURE;
+	}
     poll_fd.fd = pFile;
     poll_fd.events = POLLIN; // check for normal or out-of-band
     
     setupHandler();
+    if(shuffle)
+    {
 
+	int songNum = rand()%count; 
+
+    }
+    else
+    {
+    	
+    	
+    }
     fp = fopen("/mnt/card/beats/learntofly.txt", "r");
     if (fp == NULL)
     {
@@ -109,3 +150,4 @@ void sighandler(int signo)
     }
     close(pFile);
 }
+
