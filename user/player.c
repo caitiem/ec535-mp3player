@@ -63,10 +63,19 @@ int main(int argc, char **argv) {
 	pFile = fopen("/dev/mp3play", "r+");
     printf("USER LEVEL: all beats written to kernel\n");
 	//sending the "R" will be once Caitie says to play the song
-    fputs("R", pFile);
-    
-
-
+	
 	fclose(pFile);
+	
+	system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
+ 
+	/*pid_t pid=fork();
+    if (pid==0) { // child
+        //fputs("R", pFile);
+    }
+    else { // parent
+    	system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
+        waitpid(pid,0,0);
+    }*/
+
 	return 0;
 }
