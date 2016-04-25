@@ -30,10 +30,16 @@ static int led2 = 30;
 static int led3 = 31;
 
 // Input button pins
-static int but0 = 17;
-static int but1 = 101;
-static int but2 = 28;
-static int but3 = 113;
+static int playpause0 = 17;
+static int shuffle1 = 101;
+static int volumeup2 = 28;
+static int volumedown3 = 113;
+
+//button state variables
+static int state0 = 0;
+static int state1 = 0;
+static int state2 = 0;
+static int state3 = 0;
 
 static unsigned int counter;
 static long BEATS[1024];
@@ -76,13 +82,13 @@ static int mp3play_init(void)
 	pxa_gpio_set_value(led3, 0);
 
     //initialize gpio pins 17 & 101 as input pins
-    pxa_gpio_mode(but0);
-    pxa_gpio_mode(but1);
-    pxa_gpio_mode(but2);
-	pxa_gpio_mode(but3);
+    pxa_gpio_mode(playpause0);
+    pxa_gpio_mode(shuffle1);
+    pxa_gpio_mode(volumeup2);
+	pxa_gpio_mode(volumedown3);
     
     //setup timer
-    #setup_timer(&beatTime, beatTime_handler, 0);
+    //setup_timer(&beatTime, beatTime_handler, 0);
     
     
         
