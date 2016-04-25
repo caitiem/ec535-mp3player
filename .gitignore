@@ -1,0 +1,17 @@
+README.md~
+command_to_run_madplay.txt~
+km/.mp3play.ko.cmd
+km/.mp3play.mod.o.cmd
+km/.mp3play.o.cmd
+km/.tmp_versions/
+km/Module.symvers
+km/mp3play.c~
+km/mp3play.ko
+km/mp3play.mod.c
+km/mp3play.mod.o
+km/mp3play.o
+madplay
+player
+user/player
+user/player.c~
+*~
