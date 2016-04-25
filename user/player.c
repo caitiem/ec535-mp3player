@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 	    {
 	    	if(temp[i]=='.')
 	    	{
-	    		temp[i]="\0";
+	    		temp[i]='\0';
 	    		break;
 	    	}
 	    }
