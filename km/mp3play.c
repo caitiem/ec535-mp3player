@@ -23,14 +23,14 @@ static void mp3play_exit(void);
 static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, loff_t *f_pos);
 static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *f_pos);
 
-/*static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
+static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
 static unsigned int irqNumber1;
 static unsigned int irqNumber2;
 static unsigned int irqNumber3;
 static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
-static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);*/
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 
 // output LED pins
 static int led0 = 16;
@@ -101,9 +101,16 @@ static int mp3play_init(void)
     
     //setup timer
     //setup_timer(&beatTime, beatTime_handler, 0);
-    
-    
+    irqNumber0 = gpio_to_irq(playpause0);
+	irqNumber1 = gpio_to_irq(shuffle1);
+	irqNumber2 = gpio_to_irq(volumeup2);
+    irqNumber3 = gpio_to_irq(volumedown3);
         
+    result = request_irq(irqNumber0, (irq_handler_t) but0_irq_handler, IRQF_TRIGGER_RISING, "but0_handler", NULL);
+    result = request_irq(irqNumber1, (irq_handler_t) but1_irq_handler, IRQF_TRIGGER_RISING, "but1_handler", NULL);
+    result = request_irq(irqNumber2, (irq_handler_t) but2_irq_handler, IRQF_TRIGGER_RISING, "but2_handler", NULL);
+    result = request_irq(irqNumber3, (irq_handler_t) but3_irq_handler, IRQF_TRIGGER_RISING, "but3_handler", NULL);
+
     printk(KERN_ALERT "Module initialized\n");
     
     return 0;
@@ -205,4 +212,21 @@ static void beatTime_handler(unsigned long data)
 
 		nowPlaying = 0;
 	}   
+}
+
+static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but1_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but2_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+    return (irq_handler_t) IRQ_HANDLED; 
+}
+static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
+{
+	return (irq_handler_t) IRQ_HANDLED; 
 }
