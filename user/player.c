@@ -28,7 +28,9 @@ int main(int argc, char **argv) {
     char tempstr[15];
     float tempfloat;
     float prevNum;
-    
+    char beatpath[256];
+	char audiopath[256];
+	int songNum=0;
 	FILE * pFile;
 	FILE * fp;
 	pFile = fopen("/dev/mp3play", "r+");
@@ -76,7 +78,7 @@ int main(int argc, char **argv) {
     if(shuffle)
     {
 
-	int songNum = rand()%count; 
+		songNum = rand()%count; 
 
     }
     else
@@ -84,7 +86,9 @@ int main(int argc, char **argv) {
     	
     	
     }
-    fp = fopen("/mnt/card/beats/learntofly.txt", "r");
+	sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
+	sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
+    fp = fopen(beatpath, "r");
     if (fp == NULL)
     {
         fputs("Error opening file\n", stderr);
