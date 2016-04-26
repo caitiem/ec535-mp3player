@@ -24,19 +24,23 @@ int mystdin = 0;
 int mystdout = 1;
 char *mymp3fifo = "/tmp/mymp3fifo";
 int madpipe;
-
+int songNum=0;
+char beatpath[256];
+char audiopath[256];
+int songCount=0;
+pid_t madPID;
+pid_t aplayPID;
 int main(int argc, char **argv) {
 	srand(time(NULL));
 	char line[256];
 	char song[256];
-	int ii, j, count = 0;
+	int ii, j;
 	int i,shuffle=0;
     char tempstr[15];
     float tempfloat;
     float prevNum;
-    char beatpath[256];
-	char audiopath[256];
-	int songNum=0;
+
+
 	FILE * pFile;
 	FILE * fp;
 	pFile = fopen("/dev/mp3play", "r+");
@@ -58,7 +62,7 @@ int main(int argc, char **argv) {
 	struct dirent *ent;
 
 	char temp[256];
-	count=0;
+	songCount=0;
 	if ((dir = opendir ("/mnt/card/audio")) != NULL) {
 	  /* print all the files and directories within directory */
 	  while ((ent = readdir (dir)) != NULL) {
@@ -73,9 +77,9 @@ int main(int argc, char **argv) {
 	    		break;
 	    	}
 	    }
-	    if(count>1)
-	    	strcpy(songlist[count-2],temp);
-	    count++;
+	    if(songCount>1)
+	    	strcpy(songlist[songCount-2],temp);
+	    songCount++;
 	  }
 	  closedir (dir);
 	} else {
@@ -83,13 +87,7 @@ int main(int argc, char **argv) {
 	  perror ("");
 	  return EXIT_FAILURE;
 	}
-	count-=2;
-    if(shuffle)
-    {
-
-		songNum = rand()%count; 
-
-    }
+	songCount-=2;
 	sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
 	sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
     fp = fopen(beatpath, "r");
@@ -163,6 +161,7 @@ int main(int argc, char **argv) {
 		    close(mad_to_aplay_pipe_fd[1]);
 			//dup2(user_to_mad_pipe_fd[0], mystdin);
 			//close(user_to_mad_pipe_fd[0]);
+			madPID=getpid();
 			execve("/usr/bin/madplay", madplayargv, NULL);
 			printf("something bad has happened with madplay child\n");
 			// | aplay -D creative
@@ -172,6 +171,8 @@ int main(int argc, char **argv) {
 			dup2(mad_to_aplay_pipe_fd[0], mystdin);
 		    close(mad_to_aplay_pipe_fd[0]);
 			playing = 1;
+			aplayPID=getpid();
+			printf("PID %d\n",aplayPID);
 			execve("/usr/bin/aplay", aplayargv, NULL);
 			printf("something bad has happened with aplay child\n");
 		}
@@ -187,12 +188,12 @@ int main(int argc, char **argv) {
 		if (have_written == 0) {
 			FILE * kernelFile;
 
-			/*kernelFile = fopen("/dev/mp3play", "r+");
+			kernelFile = fopen("/dev/mp3play", "r+");
 			if (kernelFile!=NULL) {
 				fputs("R", kernelFile);
 				fclose(kernelFile);
 				have_written = 1;
-			}*/
+			}
 		}
 		pause();
 		while(1) {
@@ -251,7 +252,79 @@ void sighandler(int signo)
 		close(madpipe);
 	}
 	else if (strcmp(button_mode, "1") == 0) {
+		printf("Shuffling\n");
+		songNum = rand()%songCount;
+		sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
+		sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
+			
+			
+		pipe(user_to_mad_pipe_fd);
+		pipe(mad_to_aplay_pipe_fd);
+
+		pid_t my_pid;
+		pid_t my_pid2;
+		char *madplayargv[] = {"madplay", audiopath, "-r", "44100", "--repeat=1", "--tty-control", "--output=wave:-", NULL };
+		char *aplayargv[] = {"aplay", "-D", "creative", NULL };
+		//char *aplayargv[] = {"/usr/bin/aplay", "--help", NULL};
+		if((my_pid = fork()) == -1)
+		{
+		        perror("fork");
+		        exit(1);
+		}
+
+		if(my_pid == 0)
+		{
+
+			if((my_pid2 = fork()) == -1)
+			{
+				    perror("fork");
+				    exit(1);
+			}
+
+			if(my_pid2 == 0) {
+				/* Child process closes up input side of pipe */
+				printf("in mad child process\n");
+				dup2(mad_to_aplay_pipe_fd[1], mystdout);
+				close(mad_to_aplay_pipe_fd[1]);
+				//dup2(user_to_mad_pipe_fd[0], mystdin);
+				//close(user_to_mad_pipe_fd[0]);
+
+				madPID=getpid();
+				execve("/usr/bin/madplay", madplayargv, NULL);
+				printf("something bad has happened with madplay child\n");
+				// | aplay -D creative
+				//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
+			} else {
+				printf("my aplay second child\n");
+				dup2(mad_to_aplay_pipe_fd[0], mystdin);
+				close(mad_to_aplay_pipe_fd[0]);
+				playing = 1;
+				aplayPID=getpid();
+				execve("/usr/bin/aplay", aplayargv, NULL);
+				printf("something bad has happened with aplay child\n");
+			}
+		    
+		}
+		else
+		{
 		
+		
+		    printf("in parent process\n");
+
+			//dup2(user_to_mad_pipe_fd[1], mystdout);
+			//close(user_to_mad_pipe_fd[1]);
+			if (have_written == 0) {
+				FILE * kernelFile;
+
+				kernelFile = fopen("/dev/mp3play", "r+");
+				if (kernelFile!=NULL) {
+					fputs("R", kernelFile);
+					fclose(kernelFile);
+					have_written = 1;
+				}
+			}
+		}
+			
 	}
 	else if (strcmp(button_mode, "2") == 0) {
 		madpipe = open(mymp3fifo, O_WRONLY);     
