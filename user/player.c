@@ -281,7 +281,7 @@ void sighandler(int signo)
 		FILE * kernelFile;
 		kernelFile = fopen("/dev/mp3play", "r+");
 		if (kernelFile!=NULL) {
-			fputs("S", kernelFile);
+			fputs("F", kernelFile);
 			fclose(kernelFile);
 		}	
 			
