@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 	pid_t my_pid;
 	pid_t my_pid2;
 
-	char *madplayargv[] = {"madplay", "/mnt/card/audio/sundaycandy.mp3", "-r", "44100", "--tty-control", "--output=wave:-", NULL };
+	char *madplayargv[] = {"madplay", audiopath, "-r", "44100", "--repeat=1", "--tty-control", "--output=wave:-", NULL };
 	char *aplayargv[] = {"aplay", "-D", "creative", NULL };
 	//char *aplayargv[] = {"/usr/bin/aplay", "--help", NULL};
 
@@ -187,12 +187,12 @@ int main(int argc, char **argv) {
 		if (have_written == 0) {
 			FILE * kernelFile;
 
-			kernelFile = fopen("/dev/mp3play", "r+");
+			/*kernelFile = fopen("/dev/mp3play", "r+");
 			if (kernelFile!=NULL) {
 				fputs("R", kernelFile);
 				fclose(kernelFile);
 				have_written = 1;
-			}
+			}*/
 		}
 		pause();
 		while(1) {
