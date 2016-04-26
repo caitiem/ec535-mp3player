@@ -17,8 +17,13 @@ int handled_sigio = 0;
 char button_mode[10];
 char songlist[100][256];
 int playing = 0;
-int pipe_fd[2];
+int mad_to_aplay_pipe_fd[2];
+int user_to_mad_pipe_fd[2];
 int have_written = 0;
+int mystdin = 0;
+int mystdout = 1;
+char *mymp3fifo = "/tmp/mymp3fifo";
+int madpipe;
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -44,6 +49,8 @@ int main(int argc, char **argv) {
 		fputs("mp3play module isn't loaded\n",stderr);
 		return -1;
 	}
+
+	mkfifo(mymp3fifo, 0666);
 	
     setupHandler();
 
@@ -125,7 +132,8 @@ int main(int argc, char **argv) {
     printf("USER LEVEL: all beats written to kernel\n");
     fclose(pFile);
 
-    pipe(pipe_fd);
+    pipe(user_to_mad_pipe_fd);
+	pipe(mad_to_aplay_pipe_fd);
 	pid_t my_pid;
 	pid_t my_pid2;
 
@@ -141,54 +149,59 @@ int main(int argc, char **argv) {
 
     if(my_pid == 0)
     {
-            /* Child process closes up input side of pipe */
-			printf("in child process\n");
-			dup2(pipe_fd[1], STDOUT_FILENO);
-            close(pipe_fd[1]);
-			dup2(pipe_fd[0], STDIN_FILENO);
-			execve("/usr/bin/madplay", madplayargv, NULL);
-			printf("something bad has happened with madplay child\n");
-			// | aplay -D creative
-			//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
-    }
-    else
-    {
+
 		if((my_pid2 = fork()) == -1)
 		{
 		        perror("fork");
 		        exit(1);
 		}
+
 		if(my_pid2 == 0) {
-			printf("my second child\n");
-			dup2(pipe_fd[0], STDIN_FILENO);
-		    close(pipe_fd[0]);
+			/* Child process closes up input side of pipe */
+			printf("in mad child process\n");
+			dup2(mad_to_aplay_pipe_fd[1], mystdout);
+		    close(mad_to_aplay_pipe_fd[1]);
+			//dup2(user_to_mad_pipe_fd[0], mystdin);
+			//close(user_to_mad_pipe_fd[0]);
+			execve("/usr/bin/madplay", madplayargv, NULL);
+			printf("something bad has happened with madplay child\n");
+			// | aplay -D creative
+			//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
+		} else {
+			printf("my aplay second child\n");
+			dup2(mad_to_aplay_pipe_fd[0], mystdin);
+		    close(mad_to_aplay_pipe_fd[0]);
 			playing = 1;
 			execve("/usr/bin/aplay", aplayargv, NULL);
 			printf("something bad has happened with aplay child\n");
-		} else {
-			//printf("in parent process\n");
-			dup2(pipe_fd[0], pipe_fd[1]);
-        	close(pipe_fd[0]);
-			/*if (have_written == 0) {
-				FILE * kernelFile;
-  
-  				kernelFile = fopen("/dev/mp3play", "r+");
-				if (kernelFile!=NULL) {
-					fputs("R", kernelFile);
-					fclose(kernelFile);
-					have_written = 1;
-				}
-			}*/
-			while(1) {
-				if (handled_sigio) {
-					printf("handled sigio\n");
-					handled_sigio = 0;
-					pause();
-				}
+		}
+        
+    }
+    else
+    {
+		
+		
+        printf("in parent process\n");
+		//dup2(user_to_mad_pipe_fd[1], mystdout);
+    	//close(user_to_mad_pipe_fd[1]);
+		if (have_written == 0) {
+			FILE * kernelFile;
+
+			kernelFile = fopen("/dev/mp3play", "r+");
+			if (kernelFile!=NULL) {
+				fputs("R", kernelFile);
+				fclose(kernelFile);
+				have_written = 1;
 			}
 		}
-        /* Parent process closes up output side of pipe */
-		
+		pause();
+		while(1) {
+			if (handled_sigio) {
+				//printf("handled sigio\n");
+				handled_sigio = 0;
+				pause();
+			}
+		}
 		/*
 		}*/
     }
@@ -206,6 +219,8 @@ int main(int argc, char **argv) {
     	system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
         waitpid(pid,0,0);
     }*/
+
+	unlink(mymp3fifo);
 
 	return 0;
 }
@@ -230,22 +245,25 @@ void sighandler(int signo)
     //printf("%s\n", button_mode);
 	if (strcmp(button_mode, "0") == 0) {
 		// play/pause called
-		//printf("P");
-		//system("echo 'P' > `tty`");
-		write(pipe_fd[1], "P", 2);
+		madpipe = open(mymp3fifo, O_WRONLY);     
+		write(madpipe, "p", 1);  
+		printf("play/pause\n");
+		close(madpipe);
 	}
 	else if (strcmp(button_mode, "1") == 0) {
 		
 	}
 	else if (strcmp(button_mode, "2") == 0) {
-		//printf("+");
-		//system("echo '+' > `tty`");
-		write(pipe_fd[1], "+", 2);
+		madpipe = open(mymp3fifo, O_WRONLY);     
+		write(madpipe, "+", 1);  
+		printf("increasing volume\n");
+		close(madpipe);
 	}
 	else if (strcmp(button_mode, "3") == 0) {
-		//printf("-");
-		//system("echo '-' > `tty`");
-		write(pipe_fd[1], "-", 2);
+		madpipe = open(mymp3fifo, O_WRONLY);     
+		write(madpipe, "-", 1);  
+		printf("decreasing volume\n");
+		close(madpipe);
 	}
     handled_sigio = 1;
 }
