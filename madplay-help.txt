@@ -1,0 +1,53 @@
+Usage: ./madplay [OPTIONS] FILE [...]                                           
+Decode and play MPEG audio FILE(s).                                             
+                                                                                
+Verbosity:                                                                      
+  -v, --verbose                show status while decoding                       
+  -q, --quiet                  be quiet but show warnings                       
+  -Q, --very-quiet             be quiet and do not show warnings                
+      --display-time=MODE      use default verbose time display MODE            
+                                 (remaining, current, overall)                  
+                                                                                
+Decoding:                                                                       
+      --downsample             reduce sample rate 2:1                           
+  -i, --ignore-crc             ignore CRC errors                                
+      --ancillary-output=PATH  write ancillary data to PATH                     
+                                                                                
+Audio output:                                                                   
+  -o, --output=[TYPE:]PATH     write output to PATH with format TYPE (below)    
+  -b, --bit-depth=DEPTH        request DEPTH bits per sample                    
+  -R, --sample-rate=HERTZ      request HERTZ samples per second                 
+  -d, --no-dither              do not dither output PCM samples                 
+      --fade-in[=DURATION]     fade-in songs over DURATION (default 0:05)       
+  -a, --attenuate=DECIBELS     attenuate signal by DECIBELS (-)                 
+  -a, --amplify=DECIBELS       amplify signal by DECIBELS (+)                   
+  -A, --adjust-volume=DECIBELS override per-file volume adjustments             
+  -G, --replay-gain[=PROFILE]  enable Replay Gain volume adjustments using      
+                                 PROFILE (radio, audiophile)                    
+                                                                                
+Channel selection:                                                              
+  -1, --left                   output first (left) channel only                 
+  -2, --right                  output second (right) channel only               
+  -m, --mono                   mix left and right channels for monaural output  
+  -S, --stereo                 force stereo output                              
+                                                                                
+Playback:                                                                       
+  -s, --start=TIME             skip to begin at TIME (HH:MM:SS.DDD)             
+  -t, --time=DURATION          play only for DURATION (HH:MM:SS.DDD)            
+  -z, --shuffle                randomize file list                              
+  -r, --repeat[=MAX]           play files MAX times, or indefinitely            
+                                                                                
+Miscellaneous:                                                                  
+  -T, --show-tags-only         show ID3/encoder tags only (do not decode)       
+  -V, --version                display version number and exit                  
+      --license                show copyright/license message and exit          
+  -h, --help                   display this help and exit                       
+                                                                                
+Supported output formats:                                                       
+  cdda    CD audio, 16-bit big-endian 44100 Hz stereo PCM (*.cdr, *.cda)        
+  aiff    Audio IFF, [16-bit] PCM (*.aif, *.aiff)                               
+  wave    Microsoft RIFF/WAVE, [16-bit] PCM (*.wav)                             
+  snd     Sun/NeXT audio, 8-bit ISDN mu-law (*.au, *.snd)                       
+  raw     binary [16-bit] host-endian linear PCM                                
+  hex     ASCII hexadecimal [24-bit] linear PCM                                 
+  null    no output (decode only) 
