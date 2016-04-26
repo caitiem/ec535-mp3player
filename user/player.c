@@ -81,11 +81,6 @@ int main(int argc, char **argv) {
 		songNum = rand()%count; 
 
     }
-    else
-    {
-    	
-    	
-    }
 	sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
 	sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
     fp = fopen(beatpath, "r");
