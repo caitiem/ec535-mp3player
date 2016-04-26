@@ -211,6 +211,14 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 		memset(BEATS,0,sizeof(long)*1024);
 		
 	}
+	else if(buffer[0]=='A')
+	{
+		pause_beatTime(&beatTime);
+	}
+	else if(buffer[0]=='P')
+	{
+		restart_beatTime(&beatTime);
+	}
 	else
 	{
 	     tbptr = &buffer[0];
