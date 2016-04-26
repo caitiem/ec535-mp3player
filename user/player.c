@@ -28,7 +28,9 @@ int main(int argc, char **argv) {
     char tempstr[15];
     float tempfloat;
     float prevNum;
-    
+    char beatpath[256];
+	char audiopath[256];
+	int songNum=0;
 	FILE * pFile;
 	FILE * fp;
 	pFile = fopen("/dev/mp3play", "r+");
@@ -53,7 +55,7 @@ int main(int argc, char **argv) {
 	  /* print all the files and directories within directory */
 	  while ((ent = readdir (dir)) != NULL) {
 	    //printf ( ent->d_name);
-	    //strcpy(temp,ent->dname);
+	    strcpy(temp,ent->d_name);
 	  
 	    for(i=0;i<strlen(temp);i++)
 	    {
@@ -63,7 +65,8 @@ int main(int argc, char **argv) {
 	    		break;
 	    	}
 	    }
-	    strcpy(songlist[count],temp);
+	    if(count>1)
+	    	strcpy(songlist[count-2],temp);
 	    count++;
 	  }
 	  closedir (dir);
@@ -72,19 +75,16 @@ int main(int argc, char **argv) {
 	  perror ("");
 	  return EXIT_FAILURE;
 	}
-	
+	count-=2;
     if(shuffle)
     {
 
-	int songNum = rand()%count; 
+		songNum = rand()%count; 
 
     }
-    else
-    {
-    	
-    	
-    }
-    fp = fopen("/mnt/card/beats/learntofly.txt", "r");
+	sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
+	sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
+    fp = fopen(beatpath, "r");
     if (fp == NULL)
     {
         fputs("Error opening file\n", stderr);
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
     printf("USER LEVEL: read all beats\n");
     //ALL beats are in the BEATS file.  now need to write it to /dev/mp3play
 	fclose(pFile);
-    /*for (j=0; j<i; j++)
+    for (j=0; j<i; j++)
     {
 		pFile = fopen("/dev/mp3play", "r+");
         sprintf(tempstr, "%d", BEATS[j]);
@@ -120,21 +120,55 @@ int main(int argc, char **argv) {
         printf("USER LEVEL: wrote BEATS[%d] = %li\n", j, BEATS[j]);
 		fclose(pFile);
     }
-	pFile = fopen("/dev/mp3play", "r+");*/
+	pFile = fopen("/dev/mp3play", "r+");
     printf("USER LEVEL: all beats written to kernel\n");
-    while(1) {
-    	if (handled_sigio) {
-    		printf("pausing\n");
-    		handled_sigio = 0;
-    		pause();
-    	}
+    fclose(pFile);
+
+	int pipe_fd[2];
+    pipe(pipe_fd);
+	pid_t my_pid;
+
+	char *madplayargv[] = {"./madplay", "/mnt/card/audio/sundaycandy.mp3", "-r", "44100", "--output=wave:-", NULL };
+	char *aplayargv[] = {"aplay", "-D", "creative", NULL };
+	//char *aplayargv[] = {"/usr/bin/aplay", "--help", NULL};
+
+	if((my_pid = fork()) == -1)
+    {
+            perror("fork");
+            exit(1);
     }
+
+    if(my_pid == 0)
+    {
+            /* Child process closes up input side of pipe */
+			printf("in child process\n");
+			dup2(pipe_fd[1], STDOUT_FILENO);
+            close(pipe_fd[1]);
+			execve("./madplay", madplayargv, NULL);
+			// | aplay -D creative
+			//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
+    }
+    else
+    {
+            /* Parent process closes up output side of pipe */
+			printf("in parent process\n");
+			dup2(pipe_fd[0], STDIN_FILENO);
+            close(pipe_fd[0]);
+			execve("/usr/bin/aplay", aplayargv, NULL);
+			printf("something bad has happened\n");
+			/* while(1) {
+				if (handled_sigio) {
+					printf("pausing\n");
+					handled_sigio = 0;
+					pause();
+				}
+			}*/
+    }
+
+	//system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
+   
     //close(sigFile);
 	//sending the "R" will be once Caitie says to play the song
-	
-	//fclose(pFile);
-	
-	//system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
  
 	/*pid_t pid=fork();
     if (pid==0) { // child
