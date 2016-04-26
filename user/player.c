@@ -4,12 +4,10 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <poll.h>
 #include <time.h>
 #include <dirent.h>
 
 static long BEATS[1024];
-struct pollfd poll_fd;
 struct sigaction action;
 int oflags;
 void sighandler(int);
@@ -18,6 +16,9 @@ int sigFile;
 int handled_sigio = 0;
 char button_mode[10];
 char songlist[100][256];
+int playing = 0;
+int pipe_fd[2];
+int have_written = 0;
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -117,18 +118,18 @@ int main(int argc, char **argv) {
 		pFile = fopen("/dev/mp3play", "r+");
         sprintf(tempstr, "%d", BEATS[j]);
         fputs(tempstr, pFile);
-        printf("USER LEVEL: wrote BEATS[%d] = %li\n", j, BEATS[j]);
+        //printf("USER LEVEL: wrote BEATS[%d] = %li\n", j, BEATS[j]);
 		fclose(pFile);
     }
 	pFile = fopen("/dev/mp3play", "r+");
     printf("USER LEVEL: all beats written to kernel\n");
     fclose(pFile);
 
-	int pipe_fd[2];
     pipe(pipe_fd);
 	pid_t my_pid;
+	pid_t my_pid2;
 
-	char *madplayargv[] = {"./madplay", "/mnt/card/audio/sundaycandy.mp3", "-r", "44100", "--output=wave:-", NULL };
+	char *madplayargv[] = {"madplay", "/mnt/card/audio/sundaycandy.mp3", "-r", "44100", "--tty-control", "--output=wave:-", NULL };
 	char *aplayargv[] = {"aplay", "-D", "creative", NULL };
 	//char *aplayargv[] = {"/usr/bin/aplay", "--help", NULL};
 
@@ -144,25 +145,52 @@ int main(int argc, char **argv) {
 			printf("in child process\n");
 			dup2(pipe_fd[1], STDOUT_FILENO);
             close(pipe_fd[1]);
-			execve("./madplay", madplayargv, NULL);
+			dup2(pipe_fd[0], STDIN_FILENO);
+			execve("/usr/bin/madplay", madplayargv, NULL);
+			printf("something bad has happened with madplay child\n");
 			// | aplay -D creative
 			//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
     }
     else
     {
-            /* Parent process closes up output side of pipe */
-			printf("in parent process\n");
+		if((my_pid2 = fork()) == -1)
+		{
+		        perror("fork");
+		        exit(1);
+		}
+		if(my_pid2 == 0) {
+			printf("my second child\n");
 			dup2(pipe_fd[0], STDIN_FILENO);
-            close(pipe_fd[0]);
+		    close(pipe_fd[0]);
+			playing = 1;
 			execve("/usr/bin/aplay", aplayargv, NULL);
-			printf("something bad has happened\n");
-			/* while(1) {
+			printf("something bad has happened with aplay child\n");
+		} else {
+			//printf("in parent process\n");
+			dup2(pipe_fd[0], pipe_fd[1]);
+        	close(pipe_fd[0]);
+			/*if (have_written == 0) {
+				FILE * kernelFile;
+  
+  				kernelFile = fopen("/dev/mp3play", "r+");
+				if (kernelFile!=NULL) {
+					fputs("R", kernelFile);
+					fclose(kernelFile);
+					have_written = 1;
+				}
+			}*/
+			while(1) {
 				if (handled_sigio) {
-					printf("pausing\n");
+					printf("handled sigio\n");
 					handled_sigio = 0;
 					pause();
 				}
-			}*/
+			}
+		}
+        /* Parent process closes up output side of pipe */
+		
+		/*
+		}*/
     }
 
 	//system("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:- | aplay -D creative");
@@ -183,8 +211,6 @@ int main(int argc, char **argv) {
 }
 
 void setupHandler() {
-	poll_fd.fd = sigFile;
-    poll_fd.events = POLLIN; // check for normal or out-of-band
     // Setup signal handler
     memset(&action, 0, sizeof(action));
     action.sa_handler = sighandler;
@@ -199,8 +225,27 @@ void setupHandler() {
 // SIGIO handler
 void sighandler(int signo)
 {
-	printf("got an async\n");
+	//printf(stdout, "got an async\n");
     read(sigFile,  button_mode, 10);
-    printf("%s\n", button_mode);
+    //printf("%s\n", button_mode);
+	if (strcmp(button_mode, "0") == 0) {
+		// play/pause called
+		//printf("P");
+		//system("echo 'P' > `tty`");
+		write(pipe_fd[1], "P", 2);
+	}
+	else if (strcmp(button_mode, "1") == 0) {
+		
+	}
+	else if (strcmp(button_mode, "2") == 0) {
+		//printf("+");
+		//system("echo '+' > `tty`");
+		write(pipe_fd[1], "+", 2);
+	}
+	else if (strcmp(button_mode, "3") == 0) {
+		//printf("-");
+		//system("echo '-' > `tty`");
+		write(pipe_fd[1], "-", 2);
+	}
     handled_sigio = 1;
 }

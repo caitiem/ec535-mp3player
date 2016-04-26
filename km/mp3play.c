@@ -27,7 +27,6 @@ static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *
 static int mp3play_open(struct inode *inode, struct file *filp);
 static int mp3play_release(struct inode *inode, struct file *filp);
 static int mp3play_fasync(int fd, struct file *filp, int mode);
-static unsigned int mp3play_poll(struct file *filp, poll_table *wait);
 
 static unsigned int irqNumber0; ///< Used to share the IRQ number within this file
 static unsigned int irqNumber1;
@@ -85,8 +84,7 @@ struct file_operations mp3play_fops = {
 	read:  mp3play_read,
 	open: mp3play_open,
 	release: mp3play_release,
-	fasync: mp3play_fasync,
-	poll: mp3play_poll
+	fasync: mp3play_fasync
 };
 
 /* Declaration of the init and exit functions */
@@ -167,29 +165,8 @@ static int mp3play_release(struct inode *inode, struct file *filp)
 }
 
 static int mp3play_fasync(int fd, struct file *filp, int mode) {
-	printk(KERN_ALERT "in fasync\n");
+	//printk(KERN_ALERT "in fasync\n");
 	return fasync_helper(fd, filp, mode, &async_queue);
-}
-
-static unsigned int mp3play_poll(struct file *filp, poll_table *wait)
-{
-    unsigned int mask = 0;
-    poll_wait(filp, &mp3play_wait, wait);
-    
-    if (state0) {
-    	state0 = 0;
-    	mask |= POLLIN | POLLRDNORM;
-    } else if (state1) {
-    	state1 = 0;
-    	mask |= POLLIN | POLLRDNORM;
-    } else if (state2) {
-    	state2 = 0;
-    	mask |= POLLIN | POLLRDNORM;
-    } else if (state3) {
-    	state3 = 0;
-    	mask |= POLLIN | POLLRDNORM;
-    }
-    return mask;
 }
 
 static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, loff_t *f_pos)
@@ -205,7 +182,7 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	if (copy_from_user(buffer + *f_pos, buf, len))
 		return -EFAULT;
 	
-	printk(KERN_ALERT "KERNEL SPACER: buffer = %s\n", buffer);
+	//printk(KERN_ALERT "KERNEL SPACER: buffer = %s\n", buffer);
 	if (buffer[0] == 'R')
 	{
 		if (nowPlaying == 0)
@@ -220,7 +197,7 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 		    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
 		    iterator++;
 		}
-		printk(KERN_ALERT "IN WRITE, found R\n");
+		//printk(KERN_ALERT "IN WRITE, found R\n");
 	}
 	else if(buffer[0] == 'S')
 	{
@@ -234,7 +211,7 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	else
 	{
 	     tbptr = &buffer[0];
-	     printk(KERN_ALERT "IN WRITE, reading data into %d\n", iterator);
+	     //printk(KERN_ALERT "IN WRITE, reading data into %d\n", iterator);
 	     BEATS[iterator] = simple_strtol(tbptr, NULL, 10);
 	     iterator++;
 	}
@@ -275,8 +252,8 @@ static void beatTime_handler(unsigned long data)
     get_random_bytes(&counter, sizeof(unsigned int));
     counter = counter % 15;
 	counter++;
-    printk(KERN_ALERT "IN TIMER HANDLER\n");
-    printk(KERN_ALERT "counter = %d\n", counter);
+    //printk(KERN_ALERT "IN TIMER HANDLER\n");
+    //printk(KERN_ALERT "counter = %d\n", counter);
     gpio_set_value(led0, counter & 1);
 	gpio_set_value(led1, (counter & 2)>>1);
 	gpio_set_value(led2, (counter & 4)>>2);
