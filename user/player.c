@@ -278,13 +278,6 @@ void sighandler(int signo)
 		kill(0,SIGCHLD);
 		sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
 		sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
-		FILE * kernelFile;
-		kernelFile = fopen("/dev/mp3play", "r+");
-		if (kernelFile!=NULL) {
-			fputs("F", kernelFile);
-			fclose(kernelFile);
-		}	
-			
 		pipe(user_to_mad_pipe_fd);
 		pipe(mad_to_aplay_pipe_fd);
 
