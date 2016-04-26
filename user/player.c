@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 	  /* print all the files and directories within directory */
 	  while ((ent = readdir (dir)) != NULL) {
 	    //printf ( ent->d_name);
-	    //strcpy(temp,ent->dname);
+	    strcpy(temp,ent->d_name);
 	  
 	    for(i=0;i<strlen(temp);i++)
 	    {
@@ -65,7 +65,8 @@ int main(int argc, char **argv) {
 	    		break;
 	    	}
 	    }
-	    strcpy(songlist[count],temp);
+	    if(count>1)
+	    	strcpy(songlist[count-2],temp);
 	    count++;
 	  }
 	  closedir (dir);
@@ -74,7 +75,7 @@ int main(int argc, char **argv) {
 	  perror ("");
 	  return EXIT_FAILURE;
 	}
-	
+	count-=2;
     if(shuffle)
     {
 
