@@ -71,10 +71,13 @@ static unsigned int counter;
 static long BEATS[1024];
 static int iterator = 0;
 static int numBeats;
+static int paused_index;
 
 static struct timer_list beatTime;
 static void beatTime_handler(unsigned long data);
-
+static void pause_beatTime(struct timer_list);
+static void restart_beatTime(struct timer_list);
+static void stop_beatTime(struct timer_list);
 // async stuff
 static DECLARE_WAIT_QUEUE_HEAD(mp3play_wait);
 struct fasync_struct *async_queue; /* asynchronous readers */
@@ -302,4 +305,21 @@ static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_
 	if (async_queue)
 		kill_fasync(&async_queue, SIGIO, POLL_IN);
 	return (irq_handler_t) IRQ_HANDLED; 
+}
+static void pause_beatTime(struct timer_list timer)
+{
+	paused_index=iterator;
+	del_timer(&timer);
+	
+}
+static void restart_beatTime(struct timer_list);
+{
+	setup_timer(&beatTime, beatTime_handler, 0);
+	mod_timer(jiffies + usecs_to_jiffies(BEATS[paused_index]);
+}
+static void stop_beatTime(struct timer_list)
+{
+	del_timer(&timer);
+	iterator=0;
+	
 }
