@@ -2685,14 +2685,11 @@ static void header(int rtype, char *name)
 		FILE * kernelFile;
   
   		kernelFile = fopen("/dev/mp3play", "r+");
-		if (kernelFile==NULL) {
-			fputs("mp3play module isn't loaded\n",stderr);
-			return -1;
+		if (kernelFile!=NULL) {
+			fputs("R", kernelFile);
+			fclose(kernelFile);
+			have_written = 1;
 		}
-	
-		fputs("R", kernelFile);
-		fclose(kernelFile);
-		have_written = 1;
 	}
 	if (!quiet_mode) {
 		if (! name)

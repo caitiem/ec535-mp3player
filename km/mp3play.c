@@ -75,12 +75,13 @@ static int paused_index;
 
 static struct timer_list beatTime;
 static void beatTime_handler(unsigned long data);
-static void pause_beatTime(struct timer_list);
-static void restart_beatTime(struct timer_list);
-static void stop_beatTime(struct timer_list);
+static void pause_beatTime(void);
+static void restart_beatTime(void);
+static void stop_beatTime(void);
 // async stuff
 static DECLARE_WAIT_QUEUE_HEAD(mp3play_wait);
 struct fasync_struct *async_queue; /* asynchronous readers */
+int timer_in_use;
 
 struct file_operations mp3play_fops = {
 	write: mp3play_write, 
@@ -97,6 +98,7 @@ module_exit(mp3play_exit);
 static int mp3play_init(void)
 {
     int result;
+	timer_in_use = 0;
     
 	/* Registering device */
 	result = register_chrdev(61, "mp3play", &mp3play_fops);
@@ -147,7 +149,9 @@ static void mp3play_exit(void)
 	pxa_gpio_set_value(led2, 0);
 	pxa_gpio_set_value(led3, 0);
 	
-    del_timer(&beatTime);
+	if (timer_in_use) {
+		del_timer_sync(&beatTime);
+	}
     
     unregister_chrdev(61, "mp3play");
     
@@ -178,15 +182,15 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 
 
 	// Create input buffer
-	char * buffer = (char*)kmalloc(len, GFP_KERNEL);
-	memset(buffer, 0, len);
+	//char * buffer = (char*)kmalloc(len, GFP_KERNEL);
+	//memset(buffer, 0, len);
 
 	// Get input from user space
-	if (copy_from_user(buffer + *f_pos, buf, len))
+	if (copy_from_user(tbptr + *f_pos, buf, len))
 		return -EFAULT;
 	
-	//printk(KERN_ALERT "KERNEL SPACER: buffer = %s\n", buffer);
-	if (buffer[0] == 'R')
+	//printk(KERN_ALERT "KERNEL SPACER: tbuf = %s\n", tbuf);
+	if (tbuf[0] == 'R')
 	{
 		if (nowPlaying == 0)
 		{
@@ -198,41 +202,38 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 		    iterator = 0;
 		    printk(KERN_ALERT "nowPlaying\n");
 		    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
+			timer_in_use = 1;
 		    iterator++;
 		}
 		//printk(KERN_ALERT "IN WRITE, found R\n");
 	}
-	else if(buffer[0] == 'S')
+	else if(tbuf[0] == 'S' || tbuf[0] == 'F')
 	{
-		del_timer(&beatTime);
-		
-		nowPlaying = 0;
-		iterator=0;
-		memset(BEATS,0,sizeof(long)*1024);
-		
+		stop_beatTime();		
 	}
-	else if(buffer[0]=='A')
+	else if(tbuf[0]=='A')
 	{
-		pause_beatTime(&beatTime);
+		pause_beatTime();
 	}
-	else if(buffer[0]=='P')
+	else if(tbuf[0]=='P')
 	{
-		restart_beatTime(&beatTime);
+		restart_beatTime();
 	}
 	else
 	{
-	     tbptr = &buffer[0];
+	     //tbptr = &buffer[0];
 	     //printk(KERN_ALERT "IN WRITE, reading data into %d\n", iterator);
 	     BEATS[iterator] = simple_strtol(tbptr, NULL, 10);
 	     iterator++;
 	}
 	
+	//kfree(buffer);
 	
     return len;
 }
 static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *f_pos)
 {
-    char tbuf[256], *tbptr = tbuf;
+    char tbuf[2], *tbptr = tbuf;
     
     if (state0) {
     	state0 = 0;
@@ -269,12 +270,12 @@ static void beatTime_handler(unsigned long data)
 	gpio_set_value(led1, (counter & 2)>>1);
 	gpio_set_value(led2, (counter & 4)>>2);
 	gpio_set_value(led3, (counter & 8)>>3);
-	if (iterator < numBeats)
+	if (iterator < numBeats && timer_in_use)
 	{
     	mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
     	iterator++;
  	}
-	else
+	else if (!timer_in_use)
 	{
 		//song over
 		pxa_gpio_set_value(led0, 0);
@@ -314,20 +315,25 @@ static irq_handler_t but3_irq_handler(unsigned int irq, void *dev_id, struct pt_
 		kill_fasync(&async_queue, SIGIO, POLL_IN);
 	return (irq_handler_t) IRQ_HANDLED; 
 }
-static void pause_beatTime(struct timer_list timer)
+static void pause_beatTime()
 {
 	paused_index=iterator;
-	del_timer(&timer);
-	
+	del_timer_sync(&beatTime);
+	timer_in_use = 0;
 }
-static void restart_beatTime(struct timer_list);
+static void restart_beatTime()
 {
+	nowPlaying = 1;
 	setup_timer(&beatTime, beatTime_handler, 0);
-	mod_timer(jiffies + usecs_to_jiffies(BEATS[paused_index]);
+	mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[paused_index]));
+	timer_in_use = 1;
 }
-static void stop_beatTime(struct timer_list)
+static void stop_beatTime()
 {
-	del_timer(&timer);
+	del_timer_sync(&beatTime);
 	iterator=0;
-	
+	nowPlaying = 0;
+	memset(BEATS,0,sizeof(long)*1024);
+	timer_in_use = 0;
 }
+
