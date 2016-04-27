@@ -19,7 +19,7 @@ int have_written = 0;
 int mystdin = 0;
 int mystdout = 1;
 #define mymp3fifo "/tmp/mymp3fifo"
-int songNum=1;
+int songNum=6;
 char beatpath[256];
 char audiopath[256];
 int songCount=0;
@@ -33,6 +33,7 @@ char tempstr[15];
 float tempfloat;
 float prevNum;
 int shuffleSong = 0;
+int repeatSong = 0;
 int madpipe;
 int loadSong(int);
 int playSong(int);
@@ -109,15 +110,23 @@ int main(int argc, char **argv) {
 	pause();
 	while(1) {
 		if (handled_sigio) {
-			printf("handling sigio\n");
+			//printf("handling sigio\n");
 			handled_sigio = 0;
 			if(shuffleSong) {
 				shuffleSong = 0;
-				quitMadplay();
 				quitAplay();
+				quitMadplay();
 				playSong(songNum);
 			}
-			printf("while loop pausing\n");
+			/*if (repeatSong) {
+				repeatSong = 0;
+				printf("playing new song.\n");
+				quitAplay();
+				quitMadplay();
+				printf("successfully quit stuff.\n");
+				playSong(songNum);
+			}*/
+			//printf("while loop pausing\n");
 			pause();
 		}
 	}
@@ -142,16 +151,17 @@ void setupHandler(int sigFile) {
 void quitMadplay() {
 	printf("Quitting madplay.");
 	madpipe = open("/tmp/mymp3fifo", O_WRONLY);
-	printf("madpipe opened = %d\n", madpipe);
+	//printf("madpipe opened = %d\n", madpipe);
 	write(madpipe, "q", 1);
 	close(madpipe);
 	//usleep(100*1000);
-	system("killall madplay");
+	system("killall madplay -s SIGINT");
 	printf("killed madplay\n");
 }
 
 void quitAplay() {
 	printf("Quitting aplay.");
+	//system("killall aplay -s SIGINT");
 	system("killall aplay");
 }
 
@@ -166,14 +176,14 @@ void sighandler(int signo)
     //read(sigFile,  button_mode, 10);
 	fread(button_mode, 1, 5, readKernFile);
 	fclose(readKernFile);
-	printf("got async\n");
+	//printf("got async\n");
     //printf("button is %s\n", button_mode);
-	printf("button_mode = %s\n", button_mode);
+	//printf("button_mode = %s\n", button_mode);
 	if (button_mode[0] == '0') {
 		// play/pause called
 		printf("play/pause\n");
 		madpipe = open("/tmp/mymp3fifo", O_WRONLY);
-		printf("madpipe opened = %d\n", madpipe);
+		//printf("madpipe opened = %d\n", madpipe);
 		write(madpipe, "p", 1);
 		close(madpipe);
 		if(playing)
@@ -200,7 +210,7 @@ void sighandler(int signo)
 		}
 	}
 	else if (button_mode[0] == '1') {
-		printf("Shuffling\n");
+		printf("Shuffling.\n");
 		FILE * kernelFile;
 		kernelFile = fopen("/dev/mp3play", "r+");
 		if (kernelFile!=NULL) {
@@ -213,20 +223,25 @@ void sighandler(int signo)
 		songNum = rand()%songCount;
 	}
 	else if (button_mode[0] == '2') {
-		printf("increasing volume\n");
+		printf("Increasing volume.\n");
 		madpipe = open("/tmp/mymp3fifo", O_WRONLY);
-		printf("madpipe opened = %d\n", madpipe);
+		//printf("madpipe opened = %d\n", madpipe);
 		write(madpipe, "+", 1);  
 		close(madpipe);
 	}
 	else if (button_mode[0] == '3') {
-		printf("decreasing volume\n");
+		printf("Decreasing volume.\n");
 		madpipe = open("/tmp/mymp3fifo", O_WRONLY);
-		printf("madpipe opened = %d\n", madpipe);
+		//printf("madpipe opened = %d\n", madpipe);
 		write(madpipe, "-", 1);  
 		close(madpipe);
 	}
-	printf("setting handled_sigio\n");
+	else if (button_mode[0] == '4') {
+		printf("Choosing new song.\n");
+		repeatSong = 1;			
+		songNum = rand()%songCount;
+	}
+	//printf("setting handled_sigio\n");
     handled_sigio = 1;
 }
 
@@ -290,7 +305,7 @@ int playSong(int songNum)
 
 	pid_t my_pid;
 	pid_t my_pid2;
-	char *madplayargv[] = {"madplay", audiopath, "-r", "44100", "--repeat=1", "--tty-control", "--output=wave:-", NULL };
+	char *madplayargv[] = {"madplay", audiopath, "-r", "44100", "--tty-control", "--output=wave:-", NULL };
 	char *aplayargv[] = {"aplay", "-D", "creative", NULL };
 	//char *aplayargv[] = {"/usr/bin/aplay", "--help", NULL};
 	if((my_pid = fork()) == -1)

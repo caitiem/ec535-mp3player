@@ -1,3 +1,7 @@
 CC=/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc ./configure --host=arm-linux --prefix=/home/caitiem/ec535/project/ec535-mp3player/alsa_lib
+make
+make install 
+
 
 CC=/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc ./configure --prefix=/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install --host=arm-linux --with-alsa-inc-prefix=/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/include --with-alsa-prefix=/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/lib --disable-alsamixer --disable-xmlto --disable-nls
+make

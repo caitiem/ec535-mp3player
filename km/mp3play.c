@@ -63,6 +63,7 @@ static int state0 = 0;
 static int state1 = 0;
 static int state2 = 0;
 static int state3 = 0;
+static int state_finished = 0;
 
 //state variable
 static int nowPlaying = 0;
@@ -78,6 +79,7 @@ static void beatTime_handler(unsigned long data);
 static void pause_beatTime(void);
 static void restart_beatTime(void);
 static void stop_beatTime(void);
+static void erase_and_stop_beatTime(void);
 // async stuff
 static DECLARE_WAIT_QUEUE_HEAD(mp3play_wait);
 struct fasync_struct *async_queue; /* asynchronous readers */
@@ -194,6 +196,7 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	{
 		if (nowPlaying == 0)
 		{
+			printk("received R\n");
 		    //reached end of data to be written to array
 		    //can initialize first timer now
 		    nowPlaying = 1;
@@ -209,7 +212,7 @@ static ssize_t mp3play_write(struct file *filp, const char *buf, size_t len, lof
 	}
 	else if(tbuf[0] == 'S' || tbuf[0] == 'F')
 	{
-		stop_beatTime();		
+		erase_and_stop_beatTime();		
 	}
 	else if(tbuf[0]=='A')
 	{
@@ -247,7 +250,10 @@ static ssize_t mp3play_read(struct file *filp, char *buf, size_t count, loff_t *
     } else if (state3) {
     	state3 = 0;
     	tbptr += sprintf(tbptr, "3");
-    }    
+    } else if (state_finished) {
+		state_finished = 0;
+		tbptr += sprintf(tbptr, "4");
+	}
 
     if (copy_to_user(buf, tbuf, strlen(tbuf)))
 	{
@@ -284,7 +290,19 @@ static void beatTime_handler(unsigned long data)
 		pxa_gpio_set_value(led3, 0);
 
 		nowPlaying = 0;
-	}   
+	} else if (iterator == numBeats) {
+		state_finished = 1;
+		stop_beatTime();
+		/*if (async_queue)
+			kill_fasync(&async_queue, SIGIO, POLL_IN);*/
+		nowPlaying = 1;
+		setup_timer(&beatTime, beatTime_handler, 0);
+	    iterator = 0;
+	    printk(KERN_ALERT "nowPlaying\n");
+	    mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[iterator]));
+		timer_in_use = 1;
+	    iterator++;
+	}
 }
 
 static irq_handler_t but0_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs)
@@ -328,12 +346,21 @@ static void restart_beatTime()
 	mod_timer(&beatTime, jiffies + usecs_to_jiffies(BEATS[paused_index]));
 	timer_in_use = 1;
 }
-static void stop_beatTime()
-{
+
+static void erase_and_stop_beatTime() {
 	del_timer_sync(&beatTime);
 	iterator=0;
 	nowPlaying = 0;
 	memset(BEATS,0,sizeof(long)*1024);
+	timer_in_use = 0;
+}
+
+static void stop_beatTime()
+{
+	printk("deleting timer because at end of song.\n");
+	del_timer_sync(&beatTime);
+	nowPlaying = 0;
+	iterator = 0;
 	timer_in_use = 0;
 }
 

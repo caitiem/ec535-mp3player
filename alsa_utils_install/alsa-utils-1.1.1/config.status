@@ -363,7 +363,7 @@ Copyright (C) 2008 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1'
+ac_pwd='/ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
@@ -691,13 +691,13 @@ S["AWK"]="gawk"
 S["mkdir_p"]="/bin/mkdir -p"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
-S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/install-sh"
-S["MAKEINFO"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run autoheader"
-S["AUTOMAKE"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run automake-1.12"
-S["AUTOCONF"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run autoconf"
-S["ACLOCAL"]="${SHELL} /home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run aclocal-1.12"
+S["STRIP"]="arm-linux-strip"
+S["install_sh"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/install-sh"
+S["MAKEINFO"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run makeinfo"
+S["AUTOHEADER"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run autoheader"
+S["AUTOMAKE"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run automake-1.12"
+S["AUTOCONF"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run autoconf"
+S["ACLOCAL"]="${SHELL} /ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/alsa-utils-1.1.1/missing --run aclocal-1.12"
 S["VERSION"]="1.1.1"
 S["PACKAGE"]="alsa-utils"
 S["CYGPATH_W"]="echo"

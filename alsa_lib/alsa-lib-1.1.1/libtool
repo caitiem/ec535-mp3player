@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (alsa-lib) 1.1.1
-# Libtool was configured on host vlsi12:
+# Libtool was configured on host signals41:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -90,13 +90,13 @@ EGREP="/bin/grep -E"
 FGREP="/bin/grep -F"
 
 # A BSD- or MS-compatible name lister.
-NM="nm"
+NM="/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-nm -B"
 
 # Whether we need soft or hard links.
 LN_S="ln -s"
 
 # What is the maximum length of a command?
-max_cmd_len=3458764513820540925
+max_cmd_len=1966080
 
 # Object file suffix (normally "o").
 objext=o
@@ -120,7 +120,7 @@ to_host_file_cmd=func_convert_file_noop
 to_tool_file_cmd=func_convert_file_noop
 
 # An object symbol dumper.
-OBJDUMP="objdump"
+OBJDUMP="arm-linux-objdump"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -141,7 +141,7 @@ DLLTOOL="false"
 sharedlib_from_linklib_cmd="printf %s\\n"
 
 # The archiver.
-AR="ar"
+AR="arm-linux-ar"
 
 # Flags to create an archive.
 AR_FLAGS="cru"
@@ -150,10 +150,10 @@ AR_FLAGS="cru"
 archiver_list_spec="@"
 
 # A symbol stripping program.
-STRIP="strip"
+STRIP="arm-linux-strip"
 
 # Commands used to install an old-style archive.
-RANLIB="ranlib"
+RANLIB="arm-linux-ranlib"
 old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$tool_oldlib"
 old_postuninstall_cmds=""
 
@@ -275,7 +275,7 @@ hardcode_into_libs=yes
 sys_lib_search_path_spec="/ad/eng/courses/ec/ec535/gumstix/oe/cross/lib/gcc/arm-angstrom-linux-gnueabi/4.1.2 /ad/eng/courses/ec/ec535/gumstix/oe/cross/lib/gcc /ad/eng/courses/ec/ec535/gumstix/oe/cross/arm-angstrom-linux-gnueabi/lib "
 
 # Run-time system search path for libraries.
-sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 /lib /usr/lib /usr/lib64/R/lib /usr/lib64/atlas /usr/lib64/ctapi /usr/lib64/mysql /usr/lib64/papi-4.1.3 /usr/lib64/papi-5.1.1/usr/lib /usr/lib64/qt-3.3/lib /usr/lib64/tcl8.5 /usr/lib64/xulrunner "
+sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 /lib /usr/lib /usr/lib64/R/lib /usr/lib64/atlas /usr/lib64/ctapi /usr/lib64/llvm /usr/lib64/mysql /usr/lib64/papi-4.1.3 /usr/lib64/papi-5.1.1/usr/lib /usr/lib64/qt-3.3/lib /usr/lib64/tcl8.5 /usr/lib64/xulrunner "
 
 # Whether dlopen is supported.
 dlopen_support=yes
@@ -287,8 +287,8 @@ dlopen_self=unknown
 dlopen_self_static=unknown
 
 # Commands to strip libraries.
-old_striplib="strip --strip-debug"
-striplib="strip --strip-unneeded"
+old_striplib="arm-linux-strip --strip-debug"
+striplib="arm-linux-strip --strip-unneeded"
 
 
 # The linker used to build libraries.

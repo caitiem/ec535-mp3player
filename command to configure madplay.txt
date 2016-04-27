@@ -1,1 +1,3 @@
-CC=/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc ./configure --host=arm-linux --prefix=/ad/eng/users/c/a/caitiem/ec535/project/rootfs/home/madplaydir/install
+CC=/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc ./configure --host=arm-linux --prefix=/ad/eng/users/c/a/caitiem/ec535/project/ec535-mp3player/madplay
+make
+make install
