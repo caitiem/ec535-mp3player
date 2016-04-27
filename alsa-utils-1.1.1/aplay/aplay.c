@@ -86,6 +86,8 @@ static snd_pcm_sframes_t (*writei_func)(snd_pcm_t *handle, const void *buffer, s
 static snd_pcm_sframes_t (*readn_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 static snd_pcm_sframes_t (*writen_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 
+static int have_written = 0;
+
 enum {
 	VUMETER_NONE,
 	VUMETER_MONO,
@@ -2679,6 +2681,19 @@ static void end_au(int fd)
 
 static void header(int rtype, char *name)
 {
+	if (have_written == 0) {
+		FILE * kernelFile;
+  
+  		kernelFile = fopen("/dev/mp3play", "r+");
+		if (kernelFile==NULL) {
+			fputs("mp3play module isn't loaded\n",stderr);
+			return -1;
+		}
+	
+		fputs("R", kernelFile);
+		fclose(kernelFile);
+		have_written = 1;
+	}
 	if (!quiet_mode) {
 		if (! name)
 			name = (stream == SND_PCM_STREAM_PLAYBACK) ? "stdout" : "stdin";
