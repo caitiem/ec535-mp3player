@@ -1,0 +1,8 @@
+ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", KERNELS!="card*", TEST=="/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/sbin", TEST=="/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/share/alsa", GOTO="alsa_restore_go"
+GOTO="alsa_restore_end"
+
+LABEL="alsa_restore_go"
+TEST!="/etc/alsa/state-daemon.conf", RUN+="/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/sbin/alsactl restore $attr{device/number}"
+TEST=="/etc/alsa/state-daemon.conf", RUN+="/home/caitiem/ec535/project/ec535-mp3player/alsa_utils_install/sbin/alsactl nrestore $attr{device/number}"
+
+LABEL="alsa_restore_end"
