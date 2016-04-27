@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 			if(shuffleSong) {
 				shuffleSong = 0;
 				quitMadplay();
-				//quitAplay();
+				quitAplay();
 				playSong(songNum);
 			}
 			printf("while loop pausing\n");
@@ -176,8 +176,9 @@ void sighandler(int signo)
 		printf("madpipe opened = %d\n", madpipe);
 		write(madpipe, "p", 1);
 		close(madpipe);
-		/*if(playing)
-		{
+		if(playing)
+		{	
+			printf("Telling kernel to pause.\n");
 			FILE * kernelFile;
 			kernelFile = fopen("/dev/mp3play", "r+");
 			if (kernelFile!=NULL) {
@@ -188,6 +189,7 @@ void sighandler(int signo)
 		}
 		else
 		{
+			printf("Telling kernel to play.\n");
 			FILE * kernelFile;
 			kernelFile = fopen("/dev/mp3play", "r+");
 			if (kernelFile!=NULL) {
@@ -195,7 +197,7 @@ void sighandler(int signo)
 				fputs("P", kernelFile);
 				fclose(kernelFile);
 			}
-		}*/			
+		}
 	}
 	else if (button_mode[0] == '1') {
 		printf("Shuffling\n");
@@ -279,6 +281,7 @@ int playSong(int songNum)
 {
 	//system("killall madplay");
 	//system("killall aplay");
+	playing = 1;
 	loadSong(songNum);
 	int mad_to_aplay_pipe_fd[2];
 	int user_to_mad_pipe_fd[2];
@@ -320,7 +323,6 @@ int playSong(int songNum)
 			printf("my aplay second child\n");
 			dup2(mad_to_aplay_pipe_fd[0], mystdin);
 			close(mad_to_aplay_pipe_fd[0]);
-			playing = 1;
 			execve("/usr/bin/aplay", aplayargv, NULL);
 			printf("something bad has happened with aplay child\n");
 		}
