@@ -24,7 +24,7 @@ int mystdin = 0;
 int mystdout = 1;
 char *mymp3fifo = "/tmp/mymp3fifo";
 int madpipe;
-int songNum=0;
+int songNum=6;
 char beatpath[256];
 char audiopath[256];
 int songCount=0;
@@ -160,17 +160,15 @@ int main(int argc, char **argv) {
 		    close(mad_to_aplay_pipe_fd[1]);
 			//dup2(user_to_mad_pipe_fd[0], mystdin);
 			//close(user_to_mad_pipe_fd[0]);
-			madPID=getpid();
+			
+			madPID=my_pid2;
 			execve("/usr/bin/madplay", madplayargv, NULL);
 			printf("something bad has happened with madplay child\n");
 			// | aplay -D creative
 			//execv("./madplay /mnt/card/audio/learntofly.mp3 -r 44100 --output=wave:-", NULL);
 		} else {
-			printf("my aplay second child\n");
 			dup2(mad_to_aplay_pipe_fd[0], mystdin);
 		    close(mad_to_aplay_pipe_fd[0]);
-
-			printf("PID %d\n",aplayPID);
 			execve("/usr/bin/aplay", aplayargv, NULL);
 			printf("something bad has happened with aplay child\n");
 		}
@@ -182,11 +180,12 @@ int main(int argc, char **argv) {
 		
         printf("in parent process\n");
 		playing = 1;
+		aplayPID=my_pid;
 		//dup2(user_to_mad_pipe_fd[1], mystdout);
     	//close(user_to_mad_pipe_fd[1]);
 		if (have_written == 0) {
 			FILE * kernelFile;
-			usleep(3205000);
+			//usleep(2000000);
 			kernelFile = fopen("/dev/mp3play", "r+");
 			if (kernelFile!=NULL) {
 				fputs("R", kernelFile);
@@ -275,9 +274,15 @@ void sighandler(int signo)
 	else if (strcmp(button_mode, "1") == 0) {
 		printf("Shuffling\n");
 		songNum = rand()%songCount;
-		kill(0,SIGCHLD);
 		sprintf(beatpath,"/mnt/card/beats/%s.txt",songlist[songNum]);
 		sprintf(audiopath,"/mnt/card/audio/%s.mp3",songlist[songNum]);
+		FILE * kernelFile;
+		kernelFile = fopen("/dev/mp3play", "r+");
+		if (kernelFile!=NULL) {
+			fputs("F", kernelFile);
+			fclose(kernelFile);
+		}	
+			
 		pipe(user_to_mad_pipe_fd);
 		pipe(mad_to_aplay_pipe_fd);
 
@@ -308,8 +313,7 @@ void sighandler(int signo)
 				close(mad_to_aplay_pipe_fd[1]);
 				//dup2(user_to_mad_pipe_fd[0], mystdin);
 				//close(user_to_mad_pipe_fd[0]);
-
-				madPID=getpid();
+				system("killall madplay");
 				execve("/usr/bin/madplay", madplayargv, NULL);
 				printf("something bad has happened with madplay child\n");
 				// | aplay -D creative
@@ -319,7 +323,7 @@ void sighandler(int signo)
 				dup2(mad_to_aplay_pipe_fd[0], mystdin);
 				close(mad_to_aplay_pipe_fd[0]);
 				playing = 1;
-				aplayPID=getpid();
+				system("killall aplay");
 				execve("/usr/bin/aplay", aplayargv, NULL);
 				printf("something bad has happened with aplay child\n");
 			}
@@ -330,7 +334,7 @@ void sighandler(int signo)
 		
 		
 		    printf("in parent process\n");
-
+			
 			//dup2(user_to_mad_pipe_fd[1], mystdout);
 			//close(user_to_mad_pipe_fd[1]);
 			if (have_written == 0) {
