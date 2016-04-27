@@ -1,0 +1,323 @@
+control_shm.lo .libs/control_shm.o: control_shm.c \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdio.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/features.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/cdefs.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/wordsize.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/gnu/stubs.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/stddef.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/typesizes.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/libio.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/_G_config.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/wchar.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/wchar.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/gconv.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/stdarg.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/stdio_lim.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sys_errlist.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/stdio.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdlib.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/time.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/endian.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/endian.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/select.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/select.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sigset.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/time.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/sysmacros.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/pthreadtypes.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/alloca.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/unistd.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/posix_opt.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/confname.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/getopt.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/string.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/string.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/string2.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/fcntl.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/fcntl.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/shm.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/ipc.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/ipctypes.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/ipc.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/shm.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/socket.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/uio.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/uio.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/socket.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/limits.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sockaddr.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/socket.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/sockios.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/poll.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/poll.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/un.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/mman.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/mman.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/netinet/in.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdint.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/in.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/byteswap.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/netdb.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/rpc/netdb.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/netdb.h \
+  ../../include/aserver.h ../../include/../src/pcm/pcm_local.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/time.h \
+  ../../include/local.h ../../include/config.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/assert.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/errno.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/errno.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/errno.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/errno.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/errno.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/errno-base.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/posix_types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/stddef.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/posix_types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/types.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/ioctl.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/ioctl.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/ioctl.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/dlfcn.h \
+  /ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/dlfcn.h \
+  ../../include/sound/asound.h ../../include/sound/asoundef.h \
+  ../../include/alsa-symbols.h ../../include/version.h \
+  ../../include/global.h ../../include/input.h ../../include/output.h \
+  ../../include/error.h ../../include/conf.h ../../include/pcm.h \
+  ../../include/pcm_plugin.h ../../include/rawmidi.h \
+  ../../include/timer.h ../../include/hwdep.h ../../include/control.h \
+  ../../include/mixer.h ../../include/seq_event.h ../../include/seq.h \
+  ../../include/sound/asequencer.h ../../include/seqmid.h \
+  ../../include/seq_midi_event.h ../../include/list.h \
+  ../../include/../src/pcm/interval.h \
+  ../../include/../src/pcm/interval_inline.h \
+  ../../include/../src/pcm/mask.h ../../include/../src/pcm/mask_inline.h \
+  ../../include/../src/control/control_local.h ../../include/local.h
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdio.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/features.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/cdefs.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/wordsize.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/gnu/stubs.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/stddef.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/typesizes.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/libio.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/_G_config.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/wchar.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/wchar.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/gconv.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/stdarg.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/stdio_lim.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sys_errlist.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/stdio.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdlib.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/time.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/endian.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/endian.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/select.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/select.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sigset.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/time.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/sysmacros.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/pthreadtypes.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/alloca.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/unistd.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/posix_opt.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/confname.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/getopt.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/string.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/string.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/string2.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/fcntl.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/fcntl.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/shm.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/ipc.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/ipctypes.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/ipc.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/shm.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/socket.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/uio.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/uio.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/socket.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/include/limits.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/sockaddr.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/socket.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/sockios.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/poll.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/poll.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/un.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/mman.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/mman.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/netinet/in.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/stdint.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/in.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/byteswap.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/netdb.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/rpc/netdb.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/netdb.h:
+
+../../include/aserver.h:
+
+../../include/../src/pcm/pcm_local.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/sys/time.h:
+
+../../include/local.h:
+
+../../include/config.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/assert.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/errno.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/errno.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/errno.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/errno.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/errno.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/errno-base.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/posix_types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/stddef.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/posix_types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/types.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/linux/ioctl.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm/ioctl.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/asm-generic/ioctl.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/dlfcn.h:
+
+/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/../lib/gcc/arm-angstrom-linux-gnueabi/4.1.2/../../../../arm-angstrom-linux-gnueabi/include/bits/dlfcn.h:
+
+../../include/sound/asound.h:
+
+../../include/sound/asoundef.h:
+
+../../include/alsa-symbols.h:
+
+../../include/version.h:
+
+../../include/global.h:
+
+../../include/input.h:
+
+../../include/output.h:
+
+../../include/error.h:
+
+../../include/conf.h:
+
+../../include/pcm.h:
+
+../../include/pcm_plugin.h:
+
+../../include/rawmidi.h:
+
+../../include/timer.h:
+
+../../include/hwdep.h:
+
+../../include/control.h:
+
+../../include/mixer.h:
+
+../../include/seq_event.h:
+
+../../include/seq.h:
+
+../../include/sound/asequencer.h:
+
+../../include/seqmid.h:
+
+../../include/seq_midi_event.h:
+
+../../include/list.h:
+
+../../include/../src/pcm/interval.h:
+
+../../include/../src/pcm/interval_inline.h:
+
+../../include/../src/pcm/mask.h:
+
+../../include/../src/pcm/mask_inline.h:
+
+../../include/../src/control/control_local.h:
+
+../../include/local.h:

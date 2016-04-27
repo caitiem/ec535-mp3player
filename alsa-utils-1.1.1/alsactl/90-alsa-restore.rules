@@ -1,0 +1,8 @@
+ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", KERNELS!="card*", TEST=="/home/nmemme/EC535/Project/install/sbin", TEST=="/home/nmemme/EC535/Project/install/share/alsa", GOTO="alsa_restore_go"
+GOTO="alsa_restore_end"
+
+LABEL="alsa_restore_go"
+TEST!="/etc/alsa/state-daemon.conf", RUN+="/home/nmemme/EC535/Project/install/sbin/alsactl restore $attr{device/number}"
+TEST=="/etc/alsa/state-daemon.conf", RUN+="/home/nmemme/EC535/Project/install/sbin/alsactl nrestore $attr{device/number}"
+
+LABEL="alsa_restore_end"

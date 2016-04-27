@@ -1,0 +1,1 @@
+CC=/ad/eng/courses/ec/ec535/gumstix/oe/cross/bin/arm-linux-gcc ./configure --host=arm-linux --prefix=/home/nmemme/EC535/Project/install
